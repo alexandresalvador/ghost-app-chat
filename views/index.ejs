@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragatta - WebSocket</title>
+</head>
+
+<body>
+    <h1> Ghost App - Chat </h1>
+
+    <input type="text" id="username" placeholder="usuario"> <br>
+    <input type="text" id="mensagem" placeholder="insira a mensagem">
+
+    <button id="btnEnviar" onclick="enviar()">Enviar</button>
+
+   <div id="chat">
+
+   </div>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const SERVER_URL = 'http://localhost:5000'
+        const socket = io(SERVER_URL);
+
+        function enviar() {
+
+            const userField = document.getElementById('username');
+            const messageField = document.getElementById('mensagem');
+
+            const usuario = userField.value;
+            const message = messageField.value;
+
+            console.log(usuario, mensagem);
+
+            socket.emit('iniciaChat', {usuario, message});
+        }
+
+        socket.on('showMessage',(xpto) => {
+            const chatScreen = document.getElementById('chat')
+            const p = document.createElement('p');
+            p.innerHTML = `User: ${xpto.usuario} <br> Mensagem: ${xpto.message}`;
+            chatScreen.append(p);
+        })
+
+    </script>
+
+
+</body>
+
+</html>
